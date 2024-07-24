@@ -52,7 +52,7 @@ public:
 		delete Temp->pNext;
 		Temp->pNext = nullptr;
 	}
-	void insert(int Index, int Data)
+	void insert(int Index, int Data)//вставляет значение в список по заданному индексу
 	{
 		if (Index == 0)return push_front(Data);
 		Element* Temp = Head;
@@ -67,30 +67,33 @@ public:
 			cout << "Error" << endl;
 			return;
 		}
+		Temp = Head;
 		for (int i = 0; i < Index - 1; i++)if (Temp->pNext)Temp = Temp->pNext;
 		Temp->pNext = new Element(Data, Temp->pNext);
 	}
-	void erase(int Index)
+	void erase(int Index) //удаляет значение из списка по заданному индексу
 	{
-		Element* Temp = Head;
+		Element* Temp = Head; //Итератор 
 		int size = 0;
 		while (Temp->pNext)
 		{
 			Temp = Temp->pNext;
 			size++;
 		}
+		if (Index == size)return pop_back();
 		if (Index > size)
 		{
 			cout << "Error" << endl;
 			return;
 		}
-		if (Index == size)return pop_back();
-		Element* erased = nullptr;
-		for (int i = 0; i < Index - 2; i++)
+		Temp = Head; //Возврат к голове
+		 
+		for (int i = 0; i < Index - 2; i++)//(перед удаляемым)
 		{
-			Temp = Temp->pNext;
+			Temp = Temp->pNext; 
 		}
-		erased = Temp->pNext;
+		Element* erased = Temp->pNext;//указатель удаляемый элемент
+		Temp->pNext = Temp->pNext->pNext; 
 		//////Запуталась 
 		delete erased;
 	}
@@ -117,6 +120,7 @@ public:
 		list.print();
 		list.insert(1,1);
 		list.print();
-		//list.insert(2);
+		list.erase(2);
+		list.print();
 
 	}
