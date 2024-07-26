@@ -135,12 +135,13 @@ public:
 		}
 	}
 	//friend ForwardList operator+(const ForwardList& First, const ForwardList& Second);
-	ForwardList(int* arr) :ForwardList()
+
+	/*ForwardList(int* arr) :ForwardList()
 	{
 		int size = sizeof(arr) / sizeof(int);
 		for (int i = 0; i < size; i++) { push_back(arr[i]); }
 		cout << "CopyConstructor:\t" << this << endl;
-	};
+	};*/
 };
 
 ForwardList operator+(const ForwardList& First, const ForwardList& Second)
