@@ -14,13 +14,57 @@ public:
 	Element(int Data, Element* pNext = nullptr) :Data(Data), pNext(pNext) { count++; cout << "EConstructor:\t" << this << endl; }
 	~Element() { count--; cout << "EDestructor:\t" << this << endl; }
 	int getData()const { return Data; }
+
+
+	Element(const Element& obg) :Data(obg.Data), pNext(obg.pNext) 
+     //нужно еще как то разбираться с предыдущим элементом
+	{ count++; cout << "CopyConstructor:\t" << this << endl; }
+	//Element(Element&& obg)//нужно еще как то разбираться с предыдущим элементом
+	//{
+	//	*this = std::move(obg);
+	//	cout << "MoveConstructor:\t" << this << endl;
+	//}
+	//Element& operator =(const Element& obg)//нужно еще как то разбираться с предыдущим элементом
+	//{
+	//	if (this == &obg)return *this;
+	//	this->Data = obg.Data;
+	//	this->pNext = obg.pNext;
+	//	cout << "CopyAssignment:\t" << this << "\n";
+	//	return *this;
+	//}
+	//Element& operator=(Element&& obg)   //нужно еще как то разбираться с предыдущим элементом
+	//{
+	//	if (this == &obg) return *this;
+    //	this->Data = obg.Data;
+	//	this->pNext = obg.pNext;
+	//	obg.Data = 0;
+	//	obg.pNext = nullptr;
+	//	cout << "MoveAssignment:\t" << this << endl;
+	//	return *this;
+	//}
+
+	operator int() const { return this->Data; }
+	//operator int() { return this->Data; }
+	Element* operator ++() { return pNext; } //не работает
+	Element* operator ++(int) { return pNext; }//не работает
+
+
 	static int getСount() { return count; } //
 	Element* getPNext()const { return pNext; }
 	void setData(int Data) { this->Data = Data; }
 	void setPNext(Element* pNext) { this->pNext = pNext; }
 	friend class ForwardList;
 };
+
 int Element::count = 0;
+
+ostream& operator<<(ostream& out, Element &temp)
+{
+	out << temp.getData();
+	return out;
+}
+
+
 
 class ForwardList
 {
@@ -50,6 +94,25 @@ public:
 		//obg.Head = nullptr;
 		//obg.size = 0;
 		cout << "MoveConstructor:\t" << this << endl;
+	}
+	ForwardList(const std::initializer_list<int>& d) : ForwardList()
+	{
+		for (int i : d)
+		{
+			this->push_back(i);
+		}
+		//for (const int* it = d.begin(); it != d.end(); it++)
+		//{
+		//	//it - iterator
+		//	push_back(*it);
+		//}
+	}
+	ForwardList(int* arr, int sizeA) : ForwardList()
+	{
+		for (int i = 0; i < sizeA; i++)
+		{
+			this->push_back(arr[i]);
+		}
 	}
 
 	~ForwardList() { while (Head)pop_front(); cout << "LDestructor:\t" << this << endl; }
@@ -86,16 +149,27 @@ public:
 		for (int i = 0; i < index; i++)Temp = Temp->pNext;
 		return Temp->Data;
 	}
+	//Element* operator ++() { return pNext; }
+	//Element* operator ++(int) { return pNext; }
 
 	//					get  set:
 	int getSize()const { return size; }
 	Element* getHead()const { return Head; }
-	Element* getEnd()
+	Element* begin()const { return Head; }
+	Element* getEnd()const//последний элемент существующий
 	{
-		if (!Head) cout << "Head = nullptr" << endl;
+
+		if (!Head) { cout << "Head = nullptr" << endl; return Head; }
 		Element* Temp = Head;
 		while (Temp->pNext) { Temp = Temp->pNext; }
 		return Temp;
+	}
+	Element* end()const//указатель наа ноль после последнего элемента 
+	{
+		if (!Head) { cout << "Head = nullptr" << endl; return Head; }
+		Element* Temp = Head;
+		while (Temp->pNext) { Temp = Temp->pNext; }
+		return Temp->pNext;
 	}
 
 	//					Adding elements:
@@ -156,7 +230,7 @@ public:
 			size--;
 		}
 	}
-	
+
 	//					Methods:
 	void print()const
 	{
@@ -170,17 +244,7 @@ public:
 	}
 	//friend ForwardList operator+(const ForwardList& First, const ForwardList& Second);
 
-	ForwardList(std::initializer_list<int> d)
-	{
-		for (int i : d)
-		{
-			this->push_back(i);
-		}
-	}
-	//ForwardList(int arr[])
-	//{
-	//	
-	//}
+
 };
 
 ForwardList operator+(const ForwardList& First, const ForwardList& Second)
@@ -190,10 +254,23 @@ ForwardList operator+(const ForwardList& First, const ForwardList& Second)
 		TempList.push_back(iter->getData());
 	return TempList;
 }
-#define BASE_CHECK
+void Print(int arr[])
+{
+	cout << typeid(arr).name() << endl;
+	for (int i = 0; i < sizeof(arr) / sizeof(arr[0]); i++)
+	{
+		cout << arr[i] << tab;
+	}
+	cout << endl;
+}
+
+//#define BASE_CHECK
 //#define COUNT_CHECK
 //#define SIZE_CONSTRUCTOR_CHECK
-
+//#define OPERATOR_PLUS_CHECK
+//#define INITIALIZER_LIST_CONSTRUCTOR_CHECK
+//#define RANGE_BASED_FOR_ARRAY
+#define RANGE_BASED_FOR_LIST
 
 
 
@@ -265,18 +342,94 @@ int main()
 	cout << endl;
 #endif // SIZE_CONSTRUCTOR_CHECK
 
+#ifdef OPERATOR_PLUS_CHECK
 	ForwardList list4(5);
 	list4.print();
+	cout << delimiter;
+	cout << delimiter;
 	cout << delimiter << endl;
 
+	int j[] = { 0, 5, 0, 13, 0 };
+	ForwardList list0(j, sizeof(j) / sizeof(int));
+	list0.print();
+	cout << delimiter;
+	cout << delimiter;
+	cout << delimiter << endl;
 	ForwardList list1 = { 3, 5, 8, 13, 21 };
 	list1.print();
 	ForwardList list2 = { 34, 55, 89 };
 	list2.print();
 	ForwardList list3;
 	list3 = list1 + list2;	//Конкатенация
+	cout << delimiter << endl;
+	cout << delimiter << endl;
 	list3.print();
 	cout << delimiter << endl;
+#endif // OPERATOR_PLUS_CHECK
 
 
+#ifdef INITIALIZER_LIST_CONSTRUCTOR_CHECK
+	ForwardList list1 = { 3, 5, 8, 13, 21 };
+	list1.print();
+#endif // INITIALIZER_LIST_CONSTRUCTOR_CHECK
+
+#ifdef RANGE_BASED_FOR_ARRAY
+	int arr[] = { 3, 5, 8, 13, 21 };
+	//int* arr = new int[5] {3, 5, 8, 13, 21};
+	for (int i = 0; i < sizeof(arr) / sizeof(int); i++)
+	{
+		cout << arr[i] << tab;
+	}
+	cout << endl;
+
+	//Range-based for:
+	for (int i : arr)
+	{
+		cout << i << tab;
+	}
+	//Range - это диапазон. Под данным термином в этом контексте понимают контейнер,
+	//т.е., контейнеры иногда нзывают 'range'.
+	//Следовательно, Range-based for - это цикл for для контейнеров.
+	//https://legacy.cplusplus.com/doc/tutorial/control/#:~:text=equal%20to%2050.-,Range%2Dbased%20for%20loop,-The%20for%2Dloop
+	cout << endl;
+
+	cout << typeid(arr).name() << endl;
+	Print(arr);
+	//delete[] arr;  
+#endif // RANGE_BASED_FOR_ARRAY
+
+#ifdef RANGE_BASED_FOR_LIST
+	ForwardList list1 = { 3, 5, 8, 13, 21, 55};
+	list1.print();
+	cout << list1.begin()->getData() << "\n";
+	cout << list1.getEnd()->getData() << "\n";
+	cout << list1.end() << "\n";
+	
+	//for (const auto& i : list1) //не работает
+	//{
+	//	cout << i.getData() << tab;
+	//}
+	
+	//for (auto i = list1.begin(); i != list1.end(); i++)//не работает
+	//for (int i : list1)		
+	//{
+	//	cout << i << tab;
+	//}
+	//cout << endl;
+
+	Element el(333, 0);
+	cout << el << endl << endl;
+	
+	cout << delimiter;
+	cout << list1[1] <<  endl;
+	Element* el2=list1.begin();
+	
+	cout << el2->getData() << endl;
+	cout << (++el2)->getData() << endl;
+	cout << sizeof(list1) << endl;// всегда одинаковое 16
+	
+	int a = list1[5];
+	cout << a << endl;
+
+#endif // RANGE_BASED_FOR_LIST
 }
