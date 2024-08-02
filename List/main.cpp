@@ -1,4 +1,4 @@
-
+п»ї
 #include <iostream>
 using namespace std;
 
@@ -10,9 +10,9 @@ class List
 {
 	class Element
 	{
-		int Data;		//значение элемента
-		Element* pNext;	//указатель на следующий элемент
-		Element* pPrev;	//указатель на предыдущий элемент
+		int Data;		//Р·РЅР°С‡РµРЅРёРµ СЌР»РµРјРµРЅС‚Р°
+		Element* pNext;	//СѓРєР°Р·Р°С‚РµР»СЊ РЅР° СЃР»РµРґСѓСЋС‰РёР№ СЌР»РµРјРµРЅС‚
+		Element* pPrev;	//СѓРєР°Р·Р°С‚РµР»СЊ РЅР° РїСЂРµРґС‹РґСѓС‰РёР№ СЌР»РµРјРµРЅС‚
 	public:
 		Element(int Data, Element* pNext = nullptr, Element* pPrev = nullptr)
 			:Data(Data), pNext(pNext), pPrev(pPrev)
@@ -21,13 +21,13 @@ class List
 		}
 		~Element() { cout << "EDestructor:\t" << this << endl; }
 		friend class List;
-	}*Head, * Tail;	//объекты класса можно объявлять непосредственно после его описания.
+	}*Head, * Tail;	//РѕР±СЉРµРєС‚С‹ РєР»Р°СЃСЃР° РјРѕР¶РЅРѕ РѕР±СЉСЏРІР»СЏС‚СЊ РЅРµРїРѕСЃСЂРµРґСЃС‚РІРµРЅРЅРѕ РїРѕСЃР»Рµ РµРіРѕ РѕРїРёСЃР°РЅРёСЏ.
 	//Element* Head;
 	//Element* Tail;
-	size_t size;	//size_t - это typedef на 'unsigned int'.
-	//Директива 'typedef' создает псевдоним для существующего типа данных.
-	//typedef имеет следующий синтаксис:
-	//				typedef существующий_тип_данных псевдоним
+	size_t size;	//size_t - СЌС‚Рѕ typedef РЅР° 'unsigned int'.
+	//Р”РёСЂРµРєС‚РёРІР° 'typedef' СЃРѕР·РґР°РµС‚ РїСЃРµРІРґРѕРЅРёРј РґР»СЏ СЃСѓС‰РµСЃС‚РІСѓСЋС‰РµРіРѕ С‚РёРїР° РґР°РЅРЅС‹С….
+	//typedef РёРјРµРµС‚ СЃР»РµРґСѓСЋС‰РёР№ СЃРёРЅС‚Р°РєСЃРёСЃ:
+	//				typedef СЃСѓС‰РµСЃС‚РІСѓСЋС‰РёР№_С‚РёРї_РґР°РЅРЅС‹С… РїСЃРµРІРґРѕРЅРёРј
 public:
 	List()
 	{
@@ -38,36 +38,36 @@ public:
 	~List() { cout << "LDestructor:\t" << this << endl; }
 
 	//						Adding elements:
-	void push_front(int Data)//добавляет значение в начало списка
+	void push_front(int Data)//РґРѕР±Р°РІР»СЏРµС‚ Р·РЅР°С‡РµРЅРёРµ РІ РЅР°С‡Р°Р»Рѕ СЃРїРёСЃРєР°
 	{
 		if (Head == nullptr && Tail == nullptr) { Head = Tail = new Element(Data); }
 		else
 		{
-			//1) Создаем новый элемент:
-			//2) Привязываем новый элемент к началу списка:
-			//4) Смещаем Голову на новый элемент:
+			//1) РЎРѕР·РґР°РµРј РЅРѕРІС‹Р№ СЌР»РµРјРµРЅС‚:
+			//2) РџСЂРёРІСЏР·С‹РІР°РµРј РЅРѕРІС‹Р№ СЌР»РµРјРµРЅС‚ Рє РЅР°С‡Р°Р»Сѓ СЃРїРёСЃРєР°:
+			//4) РЎРјРµС‰Р°РµРј Р“РѕР»РѕРІСѓ РЅР° РЅРѕРІС‹Р№ СЌР»РµРјРµРЅС‚:
 			Head = new Element(Data, Head, nullptr);
-			//3) Привязываем теперь второй элемент списка к новому, теперь первому, элементу:
+			//3) РџСЂРёРІСЏР·С‹РІР°РµРј С‚РµРїРµСЂСЊ РІС‚РѕСЂРѕР№ СЌР»РµРјРµРЅС‚ СЃРїРёСЃРєР° Рє РЅРѕРІРѕРјСѓ, С‚РµРїРµСЂСЊ РїРµСЂРІРѕРјСѓ, СЌР»РµРјРµРЅС‚Сѓ:
 			Head->pNext->pPrev = Head;
 		}
 		size++;
 	}
-	void push_back(int Data)//добавляет значение в конец списка
+	void push_back(int Data)//РґРѕР±Р°РІР»СЏРµС‚ Р·РЅР°С‡РµРЅРёРµ РІ РєРѕРЅРµС† СЃРїРёСЃРєР°
 	{
 		if (Head == nullptr && Tail == nullptr) { Head = Tail = new Element(Data); }
 		else
 		{
-			//1) Создаем новый элемент:
-			//2) Привязываем новый элемент к концу списка:
-			//4) Смещаем хвост на новый элемент:
+			//1) РЎРѕР·РґР°РµРј РЅРѕРІС‹Р№ СЌР»РµРјРµРЅС‚:
+			//2) РџСЂРёРІСЏР·С‹РІР°РµРј РЅРѕРІС‹Р№ СЌР»РµРјРµРЅС‚ Рє РєРѕРЅС†Сѓ СЃРїРёСЃРєР°:
+			//4) РЎРјРµС‰Р°РµРј С…РІРѕСЃС‚ РЅР° РЅРѕРІС‹Р№ СЌР»РµРјРµРЅС‚:
 			Tail = new Element(Data, nullptr, Tail);
-			//3) Привязываем теперь второй с конца элемент списка к новому, теперь первому с конца, элементу:
+			//3) РџСЂРёРІСЏР·С‹РІР°РµРј С‚РµРїРµСЂСЊ РІС‚РѕСЂРѕР№ СЃ РєРѕРЅС†Р° СЌР»РµРјРµРЅС‚ СЃРїРёСЃРєР° Рє РЅРѕРІРѕРјСѓ, С‚РµРїРµСЂСЊ РїРµСЂРІРѕРјСѓ СЃ РєРѕРЅС†Р°, СЌР»РµРјРµРЅС‚Сѓ:
 			Tail->pPrev->pNext = Tail;
 		}
 		size++;
 	}
 
-	void pop_front()//удаляет начальный элемент списка
+	void pop_front()//СѓРґР°Р»СЏРµС‚ РЅР°С‡Р°Р»СЊРЅС‹Р№ СЌР»РµРјРµРЅС‚ СЃРїРёСЃРєР°
 	{
 		if (Head == nullptr) { cout << "Error" << endl; return; }
 		if (size == 1)
@@ -80,10 +80,10 @@ public:
 		delete Temp;
 		size--;
 	}
-	void pop_back()//удаляет последний элемент списка
+	void pop_back()//СѓРґР°Р»СЏРµС‚ РїРѕСЃР»РµРґРЅРёР№ СЌР»РµРјРµРЅС‚ СЃРїРёСЃРєР°
 	{
 		if (Head == nullptr) { cout << "Error" << endl; return; }
-		if (Head->pNext == nullptr)return pop_front();// !!!!!!! в pop_front() уже есть size--  
+		if (Head->pNext == nullptr)return pop_front();// !!!!!!! РІ pop_front() СѓР¶Рµ РµСЃС‚СЊ size--  
 		else
 		{
 			Element* Temp = Head;
@@ -95,20 +95,20 @@ public:
 	}
 
 
-	? ? ? pop_back(? ? ? );		//удаляет последний элемент списка	DONE
+	? ? ? pop_back(? ? ? );		//СѓРґР°Р»СЏРµС‚ РїРѕСЃР»РµРґРЅРёР№ СЌР»РµРјРµРЅС‚ СЃРїРёСЃРєР°	DONE
 
 	//					Methods:
 	void print()const
 	{
 		for (Element* Temp = Head; Temp; Temp = Temp->pNext)
 			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
-		cout << "Количество элементов в списке: " << size << endl;
+		cout << "РљРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ РІ СЃРїРёСЃРєРµ: " << size << endl;
 	}
 	void reverse_print()const
 	{
 		for (Element* Temp = Tail; Temp; Temp = Temp->pPrev)
 			cout << Temp->pPrev << tab << Temp << tab << Temp->Data << tab << Temp->pNext << endl;
-		cout << "Количество элементов в списке: " << size << endl;
+		cout << "РљРѕР»РёС‡РµСЃС‚РІРѕ СЌР»РµРјРµРЅС‚РѕРІ РІ СЃРїРёСЃРєРµ: " << size << endl;
 	}
 };
 
@@ -116,7 +116,7 @@ void main()
 {
 	setlocale(LC_ALL, "");
 	int n;
-	cout << "Введите размер списка: "; cin >> n;
+	cout << "Р’РІРµРґРёС‚Рµ СЂР°Р·РјРµСЂ СЃРїРёСЃРєР°: "; cin >> n;
 	List list;
 	for (int i = 0; i < n; i++)
 	{
