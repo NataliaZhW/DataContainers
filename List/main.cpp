@@ -76,26 +76,24 @@ public:
 		}
 		Element* Temp = Head;
 		Head = Head->pNext;
-		Head->pPrev = nullptr;
+		Head->pNext->pPrev = nullptr;
 		delete Temp;
 		size--;
 	}
 	void pop_back()//удаляет последний элемент списка
 	{
 		if (Head == nullptr) { cout << "Error" << endl; return; }
-		if (Head->pNext == nullptr)return pop_front();// !!!!!!! в pop_front() уже есть size--  
-		else
+		if (size == 1)
 		{
-			Element* Temp = Head;
-			while (Temp->pNext->pNext)Temp = Temp->pNext;
-			delete Temp->pNext;
-			Temp->pNext = nullptr;
-			size--;
+			Head = 0;
 		}
+		Element* Temp = Head;
+		Tail = Tail->pPrev;
+		Tail->pPrev->pNext = nullptr;
+		delete Temp;
+		size--;
 	}
 
-
-	? ? ? pop_back(? ? ? );		//удаляет последний элемент списка	DONE
 
 	//					Methods:
 	void print()const
