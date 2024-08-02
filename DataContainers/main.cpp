@@ -391,7 +391,6 @@ int main()
 	Element* el2 = list1.getHead();
 
 	cout << el2->getData() << endl;
-	cout << (++el2)->getData() << endl;
 	cout << sizeof(list1) << endl;// всегда одинаковое 16
 
 	int a = list1[5];
