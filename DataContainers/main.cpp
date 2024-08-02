@@ -16,54 +16,46 @@ public:
 	int getData()const { return Data; }
 
 
-	Element(const Element& obg) :Data(obg.Data), pNext(obg.pNext) 
-     //нужно еще как то разбираться с предыдущим элементом
-	{ count++; cout << "CopyConstructor:\t" << this << endl; }
-	//Element(Element&& obg)//нужно еще как то разбираться с предыдущим элементом
-	//{
-	//	*this = std::move(obg);
-	//	cout << "MoveConstructor:\t" << this << endl;
-	//}
-	//Element& operator =(const Element& obg)//нужно еще как то разбираться с предыдущим элементом
-	//{
-	//	if (this == &obg)return *this;
-	//	this->Data = obg.Data;
-	//	this->pNext = obg.pNext;
-	//	cout << "CopyAssignment:\t" << this << "\n";
-	//	return *this;
-	//}
-	//Element& operator=(Element&& obg)   //нужно еще как то разбираться с предыдущим элементом
-	//{
-	//	if (this == &obg) return *this;
-    //	this->Data = obg.Data;
-	//	this->pNext = obg.pNext;
-	//	obg.Data = 0;
-	//	obg.pNext = nullptr;
-	//	cout << "MoveAssignment:\t" << this << endl;
-	//	return *this;
-	//}
+
 
 	operator int() const { return this->Data; }
 	//operator int() { return this->Data; }
 	Element* operator ++() { return pNext; } //не работает
 	Element* operator ++(int) { return pNext; }//не работает
-
-
 	static int getСount() { return count; } //
 	Element* getPNext()const { return pNext; }
 	void setData(int Data) { this->Data = Data; }
 	void setPNext(Element* pNext) { this->pNext = pNext; }
+	friend class Iterator;
 	friend class ForwardList;
 };
 
 int Element::count = 0;
 
-ostream& operator<<(ostream& out, Element &temp)
+ostream& operator<<(ostream& out, Element& temp)
 {
 	out << temp.getData();
 	return out;
 }
 
+class Iterator
+{
+	Element* Temp;
+public:
+	Iterator(Element* Temp) :Temp(Temp) { cout << "IConstructor:\t" << this << endl; }
+	~Iterator() { cout << "IDestructor:\t" << this << endl; }
+	Iterator& operator++() { Temp = Temp->pNext;		return *this; }
+	Iterator operator++(int)
+	{
+		Iterator old = *this;
+		Temp = Temp->pNext;
+		return old;
+	}
+	bool operator==(const Iterator& other)const { return this->Temp == other.Temp; }
+	bool operator!=(const Iterator& other)const { return this->Temp != other.Temp; }
+	int operator*()const { return Temp->Data; }
+	int& operator*() { return Temp->Data; }
+};
 
 
 class ForwardList
@@ -79,7 +71,6 @@ public:
 		// for (int i = 0; i < sizeL; i++) { push_front(0); }
 		cout << "Constructor:\t" << this << endl;
 	}
-
 	ForwardList(const ForwardList& obg) :ForwardList() //делегируем создание пустого списка
 	{
 		*this = obg;	//Повторно используем код CopyAssignment
@@ -97,24 +88,13 @@ public:
 	}
 	ForwardList(const std::initializer_list<int>& d) : ForwardList()
 	{
-		for (int i : d)
-		{
-			this->push_back(i);
-		}
-		//for (const int* it = d.begin(); it != d.end(); it++)
-		//{
-		//	//it - iterator
-		//	push_back(*it);
-		//}
+		for (int i : d) { this->push_back(i); }
+		//for (const int* it = d.begin(); it != d.end(); it++) { push_back(*it); }
 	}
 	ForwardList(int* arr, int sizeA) : ForwardList()
 	{
-		for (int i = 0; i < sizeA; i++)
-		{
-			this->push_back(arr[i]);
-		}
+		for (int i = 0; i < sizeA; i++) { this->push_back(arr[i]); }
 	}
-
 	~ForwardList() { while (Head)pop_front(); cout << "LDestructor:\t" << this << endl; }
 
 	//                       Operators:
@@ -153,9 +133,10 @@ public:
 	//Element* operator ++(int) { return pNext; }
 
 	//					get  set:
+	Iterator begin() { return Head; }
+	Iterator end() { return nullptr; }
 	int getSize()const { return size; }
 	Element* getHead()const { return Head; }
-	Element* begin()const { return Head; }
 	Element* getEnd()const//последний элемент существующий
 	{
 
@@ -164,14 +145,7 @@ public:
 		while (Temp->pNext) { Temp = Temp->pNext; }
 		return Temp;
 	}
-	Element* end()const//указатель наа ноль после последнего элемента 
-	{
-		if (!Head) { cout << "Head = nullptr" << endl; return Head; }
-		Element* Temp = Head;
-		while (Temp->pNext) { Temp = Temp->pNext; }
-		return Temp->pNext;
-	}
-
+	
 	//					Adding elements:
 	void push_front(int Data) { Head = new Element(Data, Head); size++; }//добавляет значение в начало списка
 	void push_back(int Data)//добавляет значение в конец списка
@@ -399,35 +373,27 @@ int main()
 #endif // RANGE_BASED_FOR_ARRAY
 
 #ifdef RANGE_BASED_FOR_LIST
-	ForwardList list1 = { 3, 5, 8, 13, 21, 55};
+	ForwardList list1 = { 3, 5, 8, 13, 21, 55 };
 	list1.print();
-	cout << list1.begin()->getData() << "\n";
 	cout << list1.getEnd()->getData() << "\n";
-	cout << list1.end() << "\n";
 	
-	//for (const auto& i : list1) //не работает
-	//{
-	//	cout << i.getData() << tab;
-	//}
-	
-	//for (auto i = list1.begin(); i != list1.end(); i++)//не работает
-	//for (int i : list1)		
-	//{
-	//	cout << i << tab;
-	//}
-	//cout << endl;
+	for (int i : list1)		
+	{
+		cout << i << tab;
+	}
+	cout << endl;
 
 	Element el(333, 0);
 	cout << el << endl << endl;
-	
+
 	cout << delimiter;
-	cout << list1[1] <<  endl;
-	Element* el2=list1.begin();
-	
+	cout << list1[1] << endl;
+	Element* el2 = list1.getHead();
+
 	cout << el2->getData() << endl;
 	cout << (++el2)->getData() << endl;
 	cout << sizeof(list1) << endl;// всегда одинаковое 16
-	
+
 	int a = list1[5];
 	cout << a << endl;
 
